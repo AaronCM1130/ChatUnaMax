@@ -13,9 +13,14 @@
     "socket.io": "^2.3.0",
     "swig": "^1.4.2"
   },
-  "scripts": {
-    "start": "node server.js"
-  },
+
   "author": "UNA",
-  "license": "MIT"
+  "license": "MIT",
+  
+  "scripts": {
+  "build": "echo 'Construyendo el proyecto...'",
+  "start": "node server.js",
+  "test": "echo 'No hay pruebas definidas'"
+}
+
 }
