@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Chat Socket.IO UNA</title>
+    <link rel="stylesheet" href="/static/css/StyleDashboard.css">  <!-- Enlace al archivo CSS externo -->
+  </head>
+  <body>
+    <h1>Bienvenido a UNAChat</h1>
+    <div class="chat-container">
+      <!-- Botón de salir -->
+      <div class="logout-container">
+        <button id="logout-btn" class="logout-btn">Salir del chat</button>
+      </div>
+      
+      <!-- Espacio para mostrar los mensajes del chat -->
+      <ul id="messages"></ul>
+      <form action="">
+        <input id="nombre" autocomplete="off" placeholder="Username" value="{{ user.nickname }}" readonly />
+        <input id="m" autocomplete="off" placeholder="Escriba un mensaje" />
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+
+    <script>
+      var colorHexTxt = "";
+
+      // Función para generar colores aleatorios
+      function getRandomColor() {
+          var letters = '0123456789ABCDEF';
+          var color = '#';
+          for (var i = 0; i < 6; i++) {
+              color += letters[Math.floor(Math.random() * 16)];
+          }
+          return color;
+      }
+
+      $(function () {
+        // Inicializar la conexión a Socket.IO
+        var socket = io({
+          transports: ['websocket', 'polling'],  // Intentar WebSocket, fallback a polling
+          reconnection: true,
+          reconnectionAttempts: 5,
+          reconnectionDelay: 1000
+        });
+
+        // Enviar evento al servidor cuando se envía el formulario
+        $('form').submit(function(event) {
+          event.preventDefault();  // Evitar que la página se recargue
+          
+          var nombreTxt = $('#nombre').val() || "Anónimo";
+          var mensajeTxt = $('#m').val();
+
+          if (mensajeTxt.trim() !== "") {
+            var colorHexTxt = getRandomColor();  // Generar color aleatorio
+            var jsonMsg = { nombre: nombreTxt, mensaje: mensajeTxt, color: colorHexTxt };
+
+            // Enviar mensaje al servidor
+            socket.emit('Evento-Mensaje-Server', JSON.stringify(jsonMsg));
+
+            // Limpiar el campo de mensaje después de enviar
+            $('#m').val('');
+          }
+        });
+
+        // Escuchar los mensajes desde el servidor
+        socket.on('Evento-Mensaje-Server', function(msg) {
+          var msgJson = JSON.parse(msg);
+          var mensajeDisplay = "<b style='color:" + msgJson.color + "'>" + msgJson.nombre + "</b>: " + msgJson.mensaje;
+          $('#messages').append($('<li>').html(mensajeDisplay));
+          $('#messages').scrollTop($('#messages')[0].scrollHeight);  // Desplazar la ventana de chat hacia abajo
+        });
+
+        // Manejar la conexión
+        socket.on('connect', function() {
+          console.log("Conectado al servidor de Socket.IO");
+        });
+
+        socket.on('disconnect', function(reason) {
+          console.log("Desconectado del servidor: ", reason);
+        });
+
+        socket.on('connect_error', function(error) {
+          console.log("Error de conexión: ", error);
+        });
+
+        // Redirigir al logout cuando se hace clic en "Salir del chat"
+        $('#logout-btn').click(function() {
+          window.location.href = "/logout";  // Redirigir a la ruta de logout
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,121 @@
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+h1 {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    margin: 0;
+    font-size: 24px;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#messages {
+    list-style-type: none;
+    padding: 10px;
+    margin: 0;
+    flex-grow: 1;
+    overflow-y: scroll;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+}
+
+#messages li {
+    margin-bottom: 10px;
+    padding: 8px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    max-width: 70%;
+    clear: both;
+}
+
+#messages li:nth-child(odd) {
+    background-color: #e0f7fa;
+}
+
+#messages li b {
+    color: #007bff;
+}
+
+#nombre, #m {
+    display: inline-block;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
+
+#m {
+    flex-grow: 1;
+    width: calc(100% - 80px); /* Ajustar la caja de mensaje */
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #007bff;
+    position: relative;
+    bottom: 0;
+    border-top: 1px solid #ddd;
+}
+
+form input, form button {
+    font-size: 16px;
+}
+
+form button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #218838;
+}
+
+/* Otros estilos ya existentes */
+
+.logout-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
