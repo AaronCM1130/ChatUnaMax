@@ -22,7 +22,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3  # Actualizado a v3
         with:
-          node-version: '20.x'  # Usa Node.js 20.x (puedes cambiar si es necesario)
+          node-version: '20.x'  # Especifica la versión de Node.js (Node 20)
 
       # Paso 3: Instalar las dependencias
       - name: Install dependencies
@@ -32,9 +32,12 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # Paso 5: Ejecutar el script de start
+      # Paso 5: Ejecutar el servidor y detenerlo después de unos segundos
       - name: Start project
-        run: npm start
+        run: |
+          npm start &
+          sleep 5  # Mantiene el servidor ejecutándose durante 5 segundos
+          kill $!  # Luego lo detiene para no bloquear el workflow
 
       # Paso 6 (Opcional): Ejecutar pruebas (si las tienes definidas)
       # Como no tienes pruebas definidas, este paso solo imprimirá el mensaje definido en el script
