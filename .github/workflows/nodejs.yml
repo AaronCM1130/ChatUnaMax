@@ -1,5 +1,6 @@
 name: Node.js CI
 
+# Definir en qué eventos se debe ejecutar el workflow
 on:
   push:
     branches:
@@ -15,13 +16,13 @@ jobs:
     steps:
       # Paso 1: Clonar el repositorio
       - name: Checkout repository content
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Actualizado a v3
 
       # Paso 2: Configurar Node.js
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3  # Actualizado a v3
         with:
-          node-version: '20.x'  # Cambia la versión de Node.js si es necesario
+          node-version: '20.x'  # Especifica la versión de Node.js (Node 20)
 
       # Paso 3: Instalar las dependencias
       - name: Install dependencies
@@ -29,10 +30,15 @@ jobs:
 
       # Paso 4 (Opcional): Ejecutar el script de build si lo tienes en package.json
       - name: Build project
-        run: npm run build
-        continue-on-error: true  # Esto permitirá que el job continúe aunque no haya un script de build
+        run: |
+          if npm run | grep -q "build"; then
+            npm run build;
+          else
+            echo "No hay script de build definido en package.json";
+          fi
+        continue-on-error: true  # Si no hay build, continúa sin error
 
-      # Paso 5 (Opcional): Ejecutar pruebas (solo si tienes pruebas)
+      # Paso 5 (Opcional): Ejecutar pruebas (si las tienes definidas)
       # Si no tienes pruebas definidas, puedes eliminar o comentar este paso
       # - name: Run tests
       #   run: npm test
